@@ -1,0 +1,25 @@
+{
+    "name": "git-selector",
+    "version": "0.0.1",
+    "description": "A Python based Electron app to make switching between projects within a group easier",
+    "main": "src/js/index.js",
+    "scripts": {
+        "start": "electron .",
+        "test": "echo \"Error no test provided\" && exit(1)"
+    },
+    "keywords": [],
+    "author": "Jos Craw",
+    "license": "MIT",
+    "devDependencies": {
+        "bootstrap": "^4.4.1",
+        "electron": "^8.2.0",
+        "fs": "0.0.1-security",
+        "glob": "^7.1.6",
+        "jquery": "^3.4.1",
+        "jstree": "^3.3.9",
+        "os": "^0.1.1",
+        "popper.js": "^1.16.1",
+        "request": "^2.88.2",
+        "shelljs": "^0.8.3"
+    }
+}

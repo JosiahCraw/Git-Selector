@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Git selector</title>
+      <link rel="stylesheet" href="../css/style.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+      <link rel="stylesheet" href="../dist/proton/style.css">
+      <script src="https://kit.fontawesome.com/40f2ff26ac.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+      <div id="login" class="card login">
+        <img class="card-img-top" src="../img/gitlab-icon-rgb.jpg">
+        <div class="card-body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">URL</span>
+            </div>
+            <input class="form-control" type="text" placeholder="GitLab URL..." name="url" id="url-form" required>
+          </div>
+          <h5 class="card-text">Enter your personal access token</h5>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-key"></i></span>
+            </div>
+            <input class="form-control" type="text" placeholder="Enter GitLab token" name="token" id="token_form" required>
+            <div class="input-group-append">
+              <span><button id="token-submit" class="btn btn-primary">Submit</button></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="content" class="blur">
+        <nav class="navbar navbar-light bg-light">
+          <a class="navbar-brand" href="#">
+            <img src="../img/gitlab-icon-rgb.jpg" width="30" height="30" alt="">
+          </a>
+
+          <form class="form-inline">
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Groups<span class="caret"></span></button>
+              <ul class="dropdown-menu group-dropdown scrollable-menu" id="group-dropdown">
+                <input class="form-control" id="group-search" type="text" placeholder="Search...">
+              </ul>
+            </div>
+            <span id="group-name" class="navbar-text">Select Group</span>
+          </form>
+
+          <form class="form-inline">
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Projects<span class="caret"></span></button>
+              <ul class="dropdown-menu project-dropdown scrollable-menu" id="project-dropdown">
+                <input class="form-control" id="project-search" type="text" placeholder="Search...">
+              </ul>
+            </div>
+            <span id="project-name" class="navbar-text">Select Project</span>
+          </form>
+        </nav>
+        <h1>Logged In!!</h1>
+        <div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Destination</label>
+            </div>
+            <input type="text" id="path-holder" class="form-control" placeholder="Path...">
+            <div class="input-group-append">
+              <button id="browse-files" class="btn btn-primary" type="button">Browse</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="file-tree">
+        </div>
+        <button class="btn btn-primary" type="button" id="move">Move Selected</button>
+        <h2>Comments</h2>
+        <div class="form-group">
+          <textarea class="form-control" id="comments" rows="5"></textarea>
+        </div>
+      </div>
+      <script src="../js/render.js"></script>
+      <script>require('popper.js');</script>
+      <script>require('bootstrap');</script>
+    </body>
+  </html>
