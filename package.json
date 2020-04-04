@@ -7,14 +7,15 @@
     "scripts": {
         "start": "npm install && electron .",
         "test": "echo \"Error no test provided\" && exit(1)",
-        "postinstall": "install-app-deps",
-        "pack": "build --dir",
-        "dist": "build"
+        "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=src/img/app-logo.icns --prune=true --out=release-builds",
+        "package-win": "electron-packager . git-selector --overwrite --platform=win32 --arch=ia32 --icon=src/img/app-logo.ico --prune=true --out=release-builds --version-string.CompanyName=\"Not a Comapny inc.\" --version-string.FileDescription=\"Git Selector program\" --version-string.ProductName=\"Git Selector App\"",
+        "package-linux": "electron-packager . git-selector --overwrite --platform=linux --arch=x64 --icon=src/img/app-logo.png --prune=true --out=release-builds",
+        "package-all": "npm run package-mac && npm run package-linux && npm run package-win"
     },
     "keywords": [],
     "author": "Jos Craw",
     "license": "MIT",
-    "devDependencies": {
+    "dependencies": {
         "bootstrap": "^4.4.1",
         "electron": "^8.2.0",
         "electron-packager": "^14.2.1",
@@ -26,5 +27,6 @@
         "popper.js": "^1.16.1",
         "request": "^2.88.2",
         "shelljs": "^0.8.3"
-    }
+    },
+    "devDependencies": {}
 }

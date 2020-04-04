@@ -7,12 +7,17 @@ const shell = require('shelljs')
 
 Menu.setApplicationMenu(null)
 
-shell.mkdir('.staging')
-shell.cd('.staging')
-shell.config.execPath = shell.which('node').toString()
-
 let TOKEN = ''
 let URL = 'https://eng-git.canterbury.ac.nz'
+let basePath = app.getPath("home")
+let dirname = `${basePath}/.git-selector`
+
+shell.cd(basePath)
+shell.mkdir('.git-selector')
+shell.cd('.git-selector')
+shell.mkdir('.staging')
+shell.mkdir('.data')
+shell.config.execPath = shell.which('node').toString()
 
 ipcMain.on('login-form-submission', (event, token) => {
     request(`${URL}/api/v4/user?private_token=${token}`, { json: true}, (err, res, body) => {
@@ -69,7 +74,7 @@ ipcMain.on('open-folder-explorer', (event, currPath) => {
 
 ipcMain.on('get-directory-files', (event, path, relative=false) => {
     if (relative) {
-        glob(`${__dirname}/../../${path}/**/*`.replace(/(\s+)/g, '\$1'), {mark: false} , (err, res) => {
+        glob(`${dirname}/${path}/**/*`.replace(/(\s+)/g, '\$1'), {mark: false} , (err, res) => {
             if (err) {
                 console.log(err)
             } else {
@@ -82,7 +87,7 @@ ipcMain.on('get-directory-files', (event, path, relative=false) => {
             }
         })
     } else {
-        glob(`${path}/**/*`, {mark: false} ,(err, res) => {
+        glob(`${path}/**/*`, {mark: false}, (err, res) => {
             if (err) {
                 console.log(err)
             } else {
@@ -131,42 +136,42 @@ ipcMain.on('get-projects', (event, id) => {
 })
 
 ipcMain.on('copy-files', (event, files, dest) => {
-    shell.cd(`${__dirname}/../../.staging`.replace(/(\s+)/g, '\$1'))
+    shell.cd(`${dirname}/.staging`.replace(/(\s+)/g, '\$1'))
     files.forEach(element => {
         shell.cp('-r',`${element}`, dest)
     })
 })
 
 ipcMain.on('comment-update', (event, comment, project) => {
-    fs.writeFile(`${__dirname}/../../.data/${project}.json`.replace(/(\s+)/g, '\$1'), comment, (err) => {
+    fs.writeFile(`${dirname}/.data/${project}.json`.replace(/(\s+)/g, '\$1'), comment, (err) => {
         if (err) {
-            console.log(err)
+            console.trace(err)
         }
     })
 })
 
 ipcMain.on('pull-project', (event, uri, name) => {
     if (!shell.which('git')) {
-        console.log('program requires git')
+        console.trace('program requires git')
     } else {
-        fs.readFile(`${__dirname}/../../.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'utf8', (err, contents) => {
+        fs.readFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'utf8', (err, contents) => {
             if (err) {
                 if (err.errno === -2) {
-                    fs.writeFile(`${__dirname}/../../.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'Enter Comments', (err) => {
+                    fs.writeFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'Enter Comments', (err) => {
                         if (err) {
-                            console.log(err)
+                            console.trace(err)
                         } else {
-                            event.reply('initial-comment-data', contents)
+                            event.reply('initial-comment-data', 'Enter Comments')
                         }
                     })
                 } else {
-                    console.log(err)
+                    console.trace(err)
                 }
             } else {
                 event.reply('initial-comment-data', contents)
             }
         })
-        shell.cd(`${__dirname}/../../.staging`.replace(/(\s+)/g, '\$1'))
+        shell.cd(`${dirname}/.staging`.replace(/(\s+)/g, '\$1'))
         if (shell.exec(`git clone ${uri}`).code === 0) {
             event.reply('pull-complete', name)
         } else {
@@ -201,7 +206,7 @@ app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-        shell.cd(`${__dirname}/../..`.replace(/(\s+)/g, '\$1'))
+        shell.cd(`${dirname}`.replace(/(\s+)/g, '\$1'))
         shell.rm('-rf', '.staging')
         app.quit()
     }
