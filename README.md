@@ -80,6 +80,8 @@ This shows the app with an ENEL373 test repository in this example I am copying 
 
 :pencil2: Allow users to clear selections
 
+:pencil2: Add portable git for windows
+
 :pencil2: Test on MacOS
 
 :pencil2: Test on Windows
