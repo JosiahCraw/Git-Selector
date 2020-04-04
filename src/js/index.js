@@ -157,11 +157,11 @@ ipcMain.on('pull-project', (event, uri, name) => {
         fs.readFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'utf8', (err, contents) => {
             if (err) {
                 if (err.errno === -2) {
-                    fs.writeFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'Enter Comments', (err) => {
+                    fs.writeFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), '', (err) => {
                         if (err) {
                             console.trace(err)
                         } else {
-                            event.reply('initial-comment-data', 'Enter Comments')
+                            event.reply('initial-comment-data', '')
                         }
                     })
                 } else {
