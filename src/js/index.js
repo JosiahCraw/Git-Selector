@@ -15,14 +15,14 @@ let TOKEN = ''
 let URL = 'https://eng-git.canterbury.ac.nz'
 
 ipcMain.on('login-form-submission', (event, token) => {
-    request(`${URL}/api/v4/projects?private_token=${token}`, { json: true}, (err, res, body) => {
+    request(`${URL}/api/v4/user?private_token=${token}`, { json: true}, (err, res, body) => {
         if (err) {
             console.log(err)
             event.reply('auth-failed', '')
         }
         if (res.statusCode === 200) {
             TOKEN = token
-            event.reply('auth-successful')
+            event.reply('auth-successful', body.username, body.avatar_url)
         } else {
             event.reply('auth-failed')
         }
@@ -39,6 +39,12 @@ ipcMain.on('get-git-groups', (event, arg) => {
             event.reply('git-groups', body)
         } else {
             console.log(`Error Status Code: ${res.statusCode}`)
+        }
+        pages = res.headers["x-total-pages"]
+        for (var i=2; i<pages; i++) {
+            request(`${URL}/api/v4/groups?private_token=${TOKEN}&simple=true&membership=true&page=${i}`, { json: true}, (err, res, body) => {
+                event.reply('add-groups', body)
+            })
         }
     })
 })
@@ -63,13 +69,13 @@ ipcMain.on('open-folder-explorer', (event, currPath) => {
 
 ipcMain.on('get-directory-files', (event, path, relative=false) => {
     if (relative) {
-        glob(`${__dirname}/../../${path}/**/*`.replace(/(\s+)/g, '\\$1'), {mark: false} , (err, res) => {
+        glob(`${__dirname}/../../${path}/**/*`.replace(/(\s+)/g, '\$1'), {mark: false} , (err, res) => {
             if (err) {
                 console.log(err)
             } else {
                 fileArray = []
                 res.forEach(element => {
-                    index = element.indexOf(`${path}/`.replace(/(\s+)/g, '\\$1')) + path.length + 1
+                    index = element.indexOf(`${path}/`.replace(/(\s+)/g, '\$1')) + path.length + 1
                     fileArray.push(element.slice(index))
                 })
                 event.reply('directory-file-structure', fileArray)
@@ -86,8 +92,8 @@ ipcMain.on('get-directory-files', (event, path, relative=false) => {
     }
 })
 
-ipcMain.on('get-projects', (event, id) => {
-    request(`${URL}/api/v4/groups/${id}/projects?private_token=${TOKEN}`, { json: true}, (err, res, body) => {
+ipcMain.on('get-all-projects', (event) => {
+    request(`${URL}/api/v4/projects?private_token=${TOKEN}&simple=true&membership=true`, { json: true}, (err, res, body) => {
         if (err) {
             console.log(err)
         }
@@ -96,19 +102,43 @@ ipcMain.on('get-projects', (event, id) => {
         } else {
             console.log(`Error Status Code: ${res.statusCode}`)
         }
+        pages = res.headers["x-total-pages"]
+        for (var i=2; i<pages; i++) {
+            request(`${URL}/api/v4/projects?private_token=${TOKEN}&simple=true&membership=true&page=${i}`, { json: true}, (err, res, body) => {
+                event.reply('add-projects', body)
+            })
+        }
+    })
+})
+
+ipcMain.on('get-projects', (event, id) => {
+    request(`${URL}/api/v4/groups/${id}/projects?private_token=${TOKEN}&simple=true`, { json: true}, (err, res, body) => {
+        if (err) {
+            console.log(err)
+        }
+        if (res.statusCode === 200) {
+            event.reply('group-projects', body)
+        } else {
+            console.log(`Error Status Code: ${res.statusCode}`)
+        }
+        pages = res.headers["x-total-pages"]
+        for (var i=2; i<pages; i++) {
+            request(`${URL}/api/v4/projects?private_token=${TOKEN}&simple=true&membership=true&page=${i}`, { json: true}, (err, res, body) => {
+                event.reply('add-projects', body)
+            })
+        }
     })
 })
 
 ipcMain.on('copy-files', (event, files, dest) => {
-    shell.cd(`${__dirname}/../../.staging`.replace(/(\s+)/g, '\\$1'))
+    shell.cd(`${__dirname}/../../.staging`.replace(/(\s+)/g, '\$1'))
     files.forEach(element => {
         shell.cp('-r',`${element}`, dest)
     })
 })
 
 ipcMain.on('comment-update', (event, comment, project) => {
-    console.log(project)
-    fs.writeFile(`${__dirname}/../../.data/${project}.json`.replace(/(\s+)/g, '\\$1'), comment, (err) => {
+    fs.writeFile(`${__dirname}/../../.data/${project}.json`.replace(/(\s+)/g, '\$1'), comment, (err) => {
         if (err) {
             console.log(err)
         }
@@ -119,12 +149,14 @@ ipcMain.on('pull-project', (event, uri, name) => {
     if (!shell.which('git')) {
         console.log('program requires git')
     } else {
-        fs.readFile(`${__dirname}/../../.data/${name}.json`.replace(/(\s+)/g, '\\$1'), 'utf8', (err, contents) => {
+        fs.readFile(`${__dirname}/../../.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'utf8', (err, contents) => {
             if (err) {
                 if (err.errno === -2) {
-                    fs.writeFile(`${__dirname}/../../.data/${name}.json`.replace(/(\s+)/g, '\\$1'), 'Enter Comments', (err) => {
+                    fs.writeFile(`${__dirname}/../../.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'Enter Comments', (err) => {
                         if (err) {
                             console.log(err)
+                        } else {
+                            event.reply('initial-comment-data', contents)
                         }
                     })
                 } else {
@@ -134,9 +166,9 @@ ipcMain.on('pull-project', (event, uri, name) => {
                 event.reply('initial-comment-data', contents)
             }
         })
+        shell.cd(`${__dirname}/../../.staging`.replace(/(\s+)/g, '\$1'))
         if (shell.exec(`git clone ${uri}`).code === 0) {
             event.reply('pull-complete', name)
-            event.reply('initial-comment', )
         } else {
             console.log(`Clone Failed for URI ${uri}`)
             event.reply('pull-complete', name)
@@ -155,6 +187,7 @@ ipcMain.on('set-url', (event, url) => {
 const createWindow = () => {
     window = new BrowserWindow({
         width: 800, height: 900,
+        icon: `${__dirname}/../img/app-logo.png`,
         darkTheme: true, 
         titleBarStyle: 'hidden',
         webPreferences: {
@@ -168,7 +201,7 @@ app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-        shell.cd(`${__dirname}/../..`.replace(/(\s+)/g, '\\$1'))
+        shell.cd(`${__dirname}/../..`.replace(/(\s+)/g, '\$1'))
         shell.rm('-rf', '.staging')
         app.quit()
     }

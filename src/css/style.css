@@ -7,10 +7,58 @@
     z-index: 1;
 }
 
-.logo-header img {
+.login-logo {
+    z-index: 110;
+}
+
+.login-logo img {
+    margin-top: 2vh;
     position: relative;
-    width: 30%;
-    height: auto;
+    width: 300px;
+    height: 300px;
+    margin-left: calc(50% - 15vh);
+}
+
+.user-info-div img {
+    border-radius: 50%;
+}
+
+.comments {
+    margin-top: 25px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.help-button {
+    font-size: 20pt;
+    margin-right: 20px;
+}
+
+.repo-browser {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.repo-file-tree {
+    max-height: 400px;
+    overflow-x: hidden;
+}
+
+.comment-text {
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.comment-card {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+h1 {
+    font-family: sans-serif;
 }
 
 #login {
@@ -24,8 +72,71 @@
     box-shadow: 5px 5px 5px 2px rgba(55, 55, 55, 0.2)
 }
 
+#help {
+    z-index: 100;
+    position: fixed;
+    width: 50%;
+    height: 70vh;
+    top: 15%;
+    left: 25%;
+    background-color: white;
+    box-shadow: 5px 5px 5px 2px rgba(55, 55, 55, 0.2)
+}
+
+.help-card {
+    margin: 20px;
+    margin-top: 50px;
+    max-height: calc(70vh - 80px - 20pt);
+    overflow-x: hidden;
+}
+
+.destination-browser {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.help-close-button {
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+    margin-top: 5px;
+    font-size: 20pt;
+}
+
+.help-text {
+    margin: 10px;
+}
+
+.nav-button-dropdown {
+    margin-left: 10px;
+}
+
+.system-browse {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.login-logo-text {
+    margin-left: calc(25vw + 50px);
+    transform: translateX(-50%);
+    margin-top: 210px;
+    z-index: 200;
+    position: fixed;
+}
+
+.login-logo-text span {
+    font-size: 55pt;
+    font-family: 'Indie Flower';
+}
+
+.logo-link {
+    font-family: 'Indie Flower';
+}
+
 .scrollable-menu {
     height: auto;
-    max-height: 200px;
+    max-height: 250px;
     overflow-x: hidden;
 }

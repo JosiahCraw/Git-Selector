@@ -1,11 +1,15 @@
 {
     "name": "git-selector",
     "version": "0.0.1",
+    "productName": "Git Selector Application",
     "description": "A Python based Electron app to make switching between projects within a group easier",
     "main": "src/js/index.js",
     "scripts": {
-        "start": "electron .",
-        "test": "echo \"Error no test provided\" && exit(1)"
+        "start": "npm install && electron .",
+        "test": "echo \"Error no test provided\" && exit(1)",
+        "postinstall": "install-app-deps",
+        "pack": "build --dir",
+        "dist": "build"
     },
     "keywords": [],
     "author": "Jos Craw",
@@ -13,6 +17,7 @@
     "devDependencies": {
         "bootstrap": "^4.4.1",
         "electron": "^8.2.0",
+        "electron-packager": "^14.2.1",
         "fs": "0.0.1-security",
         "glob": "^7.1.6",
         "jquery": "^3.4.1",

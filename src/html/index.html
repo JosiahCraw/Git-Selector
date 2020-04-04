@@ -3,6 +3,7 @@
     <head>
       <meta charset="UTF-8">
       <title>Git selector</title>
+      <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="../css/style.css">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
@@ -11,7 +12,12 @@
     </head>
     <body>
       <div id="login" class="card login">
-        <img class="card-img-top" src="../img/gitlab-icon-rgb.jpg">
+        <div class="login-logo">
+          <img class="card-img-top" src="../img/git-seeklogo.com.svg">
+        </div>
+        <div class="login-logo-text">
+          <span class="logo-overlap-text"><b>Selector</b></span>
+        </div>
         <div class="card-body">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -24,58 +30,149 @@
             <div class="input-group-prepend">
               <span class="input-group-text"><i class="fas fa-key"></i></span>
             </div>
-            <input class="form-control" type="text" placeholder="Enter GitLab token" name="token" id="token_form" required>
+            <input class="form-control" type="password" placeholder="Enter GitLab token" name="token" id="token_form" required autofocus>
             <div class="input-group-append">
               <span><button id="token-submit" class="btn btn-primary">Submit</button></span>
             </div>
           </div>
+          <span id="invalid-token" style="color: red">Invalid Token</span>
         </div>
       </div>
       <div id="content" class="blur">
         <nav class="navbar navbar-light bg-light">
-          <a class="navbar-brand" href="#">
-            <img src="../img/gitlab-icon-rgb.jpg" width="30" height="30" alt="">
+          <a class="navbar-brand logo-link" href="#">
+            <img src="../img/git-seeklogo.com.svg" width="40" height="40">
+            <b>Selector</b>
           </a>
+          <div class="mr-0">
+            <form class="form-inline nav-button-dropdown">
+              <div class="dropdown mr-sm-2">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Groups<span class="caret"></span></button>
+                <ul class="dropdown-menu group-dropdown scrollable-menu" id="group-dropdown">
+                  <input class="form-control" id="group-search" type="text" placeholder="Search...">
+                </ul>
+              </div>
+              <span id="group-name" class="navbar-text my-2 my-sm0">Select Group</span>
+            </form>
+          </div>
+          
+          <div class="mr-auto nav-button-dropdown">
+            <form class="form-inline">
+              <div class="dropdown mr-sm-2 ">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Projects<span class="caret"></span></button>
+                <ul class="dropdown-menu project-dropdown scrollable-menu" id="project-dropdown">
+                  <input class="form-control" id="project-search" type="text" placeholder="Search...">
+                </ul>
+              </div>
+              <span id="project-name" class="navbar-text my-2 my-sm2">Select Project</span>
+            </form>
+          </div>
 
-          <form class="form-inline">
-            <div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Groups<span class="caret"></span></button>
-              <ul class="dropdown-menu group-dropdown scrollable-menu" id="group-dropdown">
-                <input class="form-control" id="group-search" type="text" placeholder="Search...">
-              </ul>
-            </div>
-            <span id="group-name" class="navbar-text">Select Group</span>
-          </form>
+          <div class="ml-auto help-button">
+            <a id=help-button href="#"><i class="fas fa-question-circle"></i></a>
+          </div>
 
-          <form class="form-inline">
-            <div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Projects<span class="caret"></span></button>
-              <ul class="dropdown-menu project-dropdown scrollable-menu" id="project-dropdown">
-                <input class="form-control" id="project-search" type="text" placeholder="Search...">
-              </ul>
-            </div>
-            <span id="project-name" class="navbar-text">Select Project</span>
-          </form>
+          <div class="user-info-div mr-0">
+              <span id="user-name" class="user-name"></span>
+            <img id="user-avatar" class="user-avatar" src="../img/empty-user.svg" width="30" height="30">
+          </div>
         </nav>
-        <h1>Logged In!!</h1>
-        <div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Destination</label>
+
+        <div class="repo-browser">
+          <div class="card">
+            <div class="card-header">
+              <h5 style="align-content: center"><b>Repository Browser</b></h5>
             </div>
-            <input type="text" id="path-holder" class="form-control" placeholder="Path...">
-            <div class="input-group-append">
-              <button id="browse-files" class="btn btn-primary" type="button">Browse</button>
+            <div class="card-body repo-file-tree">
+              <div class="file-tree-container">
+                <div id="file-tree">
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div id="file-tree">
+        <div class="destination-browser">
+          <div class="card">
+            <div class="card-header">
+              <h5><b>Destination Browser</b></h5>
+            </div>
+            <div class="card-content text-center">
+              <div class="system-browse">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text">Destination</label>
+                  </div>
+                  <input type="text" id="path-holder" class="form-control" placeholder="Path...">
+                  <div class="input-group-append">
+                    <button id="browse-files" class="btn btn-primary" type="button">Browse</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-center">
+              <button class="btn btn-primary" type="button" id="move">Move Selected</button>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-primary" type="button" id="move">Move Selected</button>
-        <h2>Comments</h2>
-        <div class="form-group">
-          <textarea class="form-control" id="comments" rows="5"></textarea>
+
+        <div class="comment-card">
+          <div class="card">
+            <div class="card-header">
+              <h5><b>Comments</b></h5>
+            </div>
+            <div class="card-content">
+              <div class="comment-text">
+                <div class="form-group">
+                  <textarea class="form-control" id="comments" rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <div id="help" class="help">
+          <span class="help-close-button">
+            <a id="close-help" href="#"><i class="fas fa-times-circle"></i></a>
+          </span>
+          <div class="card help-card">
+            <div class="card-header text-center">
+              <h5><b>Help</b></h5>
+            </div>
+            <div class="card-content help-card-content">
+              <div class="help-text overflow-auto">
+                <h5><b>Getting projects</b></h5>
+                <span>
+                  When loaded the application will show all of the groups your GitLab user can access under the groups dropdown at the top menu.
+                  At this time all the projects that you are a member of are also shown under the projects dropdown.
+                </span>
+  
+                <h5><b>Repository Navigation</b></h5>
+                <ul>
+                  <li>
+                  	<span>
+                  	  Once a project has been selected wait a moment for the repository to clone then the repository file structure will appear within
+                  	  the repository browser section.
+                  	</span>
+                  </li>
+                  
+                  <li>
+                    <span>
+                      When a folder is selected all of the folders and file beneath it will be copied to your destination in this case the folder structure will remain otherwise the files without any directory structure
+                      will be copied into the destination. 
+                    </span>
+                  </li>
+                </ul>
+                
+                <h5><b>Comments</b></h5>
+                <span>
+                  Comments do not need to  be saved this is automatically done.
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <script src="../js/render.js"></script>
