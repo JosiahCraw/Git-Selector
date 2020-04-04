@@ -30,10 +30,15 @@ The app also supports local commenting making it easier to catchup to where you 
 <a name="install"></a>
 
 ## 2. Installation
-Ensure that NPM is installed on your machine and run the following commands:
+Ensure that NPM is installed on your machine and run the following command:
+
 ```console
 user@computer:~$ npm run package-linux //linux can be replaced with win or mac depending on your operating system
 ```
+
+On Windows you can run this command from git bash once NPM is installed
+
+I have found some issues with native windows packaging however, it seems like if you have a space in your user name it causes npm to fail. Windows does work running from source though
 
 This will create a package in `release-builds`
 
@@ -55,6 +60,8 @@ This section will be mostly pictures :tada:
 
 To access get in all you need to do is enter the GitLab URL for the instance you are connecting to (for these examples I will be using the University of Canterbury Eng Git Server)
 and the personal access token for your account on the given server find out how to make one [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#creating-a-personal-access-token).
+
+The software also expects you to be using git with ssh.
 
 ![Main Screen](wiki/img/main-screen.png)
 
