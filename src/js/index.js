@@ -4,12 +4,14 @@ const os = require('os')
 const glob = require('glob')
 const fs = require('fs')
 const shell = require('shelljs')
+const exec = require('child_process').exec
 
 Menu.setApplicationMenu(null)
 
 let TOKEN = ''
 let URL = 'https://eng-git.canterbury.ac.nz'
 let basePath = app.getPath("home")
+console.log(basePath)
 let dirname = `${basePath}/.git-selector`
 
 shell.cd(basePath)
@@ -17,7 +19,6 @@ shell.mkdir('.git-selector')
 shell.cd('.git-selector')
 shell.mkdir('.staging')
 shell.mkdir('.data')
-shell.config.execPath = shell.which('node').toString()
 
 ipcMain.on('login-form-submission', (event, token) => {
     request(`${URL}/api/v4/user?private_token=${token}`, { json: true}, (err, res, body) => {
@@ -151,34 +152,47 @@ ipcMain.on('comment-update', (event, comment, project) => {
 })
 
 ipcMain.on('pull-project', (event, uri, name) => {
-    if (!shell.which('git')) {
-        console.trace('program requires git')
-    } else {
-        fs.readFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'utf8', (err, contents) => {
-            if (err) {
-                if (err.errno === -2 || err.errno === -4058) {
-                    fs.writeFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), '', (err) => {
-                        if (err) {
-                            console.trace(err)
-                        } else {
-                            event.reply('initial-comment-data', '')
-                        }
-                    })
-                } else {
-                    console.trace(err)
-                }
+    // if (!shell.which('git')) {
+    //     console.trace('program requires git')
+    // } else {
+    fs.readFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'utf8', (err, contents) => {
+        if (err) {
+            if (err.errno === -2 || err.errno === -4058) {
+                fs.writeFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), '', (err) => {
+                    if (err) {
+                        console.trace(err)
+                    } else {
+                        event.reply('initial-comment-data', '')
+                    }
+                })
             } else {
-                event.reply('initial-comment-data', contents)
+                console.trace(err)
             }
-        })
-        shell.cd(`${dirname}/.staging`.replace(/(\s+)/g, '\$1'))
-        if (shell.exec(`git clone ${uri}`).code === 0) {
-            event.reply('pull-complete', name)
         } else {
-            console.log(`Clone Failed for URI ${uri}`)
-            event.reply('pull-complete', name)
+            event.reply('initial-comment-data', contents)
         }
-    }
+    })
+    shell.cd(`${dirname}/.staging`.replace(/(\s+)/g, '\$1'))
+
+    let clone = exec(`export PATH=/usr/bin:$PATH && cd ${dirname}/.staging && git clone ${uri}`, (error, stdout, stderr) => {
+        if (error) {
+            console.trace(error)
+            console.log('STDOUT: '+stdout)
+            console.log('STDERR: '+stderr)
+        }
+        event.reply('pull-complete', name)
+    })
+
+    clone.on('exit', (code) => {
+        console.log(code)
+    })
+    // if (shell.exec(`git clone ${uri}`).code === 0) {
+    //     event.reply('pull-complete', name)
+    // } else {
+    //     console.log(`Clone Failed for URI ${uri}`)
+    //     event.reply('pull-complete', name)
+    // }
+    //}
 })
 
 ipcMain.on('get-url', (event) => {

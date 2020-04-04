@@ -1,6 +1,7 @@
 {
     "name": "git-selector",
     "version": "0.0.1",
+    "homepage": "git-selector.sys-io.net",
     "productName": "Git Selector Application",
     "description": "A Python based Electron app to make switching between projects within a group easier",
     "main": "src/js/index.js",
@@ -9,16 +10,53 @@
         "test": "echo \"Error no test provided\" && exit(1)",
         "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=src/img/app-logo.icns --prune=true --out=release-builds",
         "package-win": "electron-packager . git-selector --overwrite --platform=win32 --arch=ia32 --icon=src/img/app-logo.ico --prune=true --out=release-builds --version-string.CompanyName=\"Not a Comapny inc.\" --version-string.FileDescription=\"Git Selector program\" --version-string.ProductName=\"Git Selector App\"",
-        "package-linux": "electron-packager . git-selector --overwrite --platform=linux --arch=x64 --icon=src/img/app-logo.png --prune=true --out=release-builds",
-        "package-all": "npm run package-mac && npm run package-linux && npm run package-win"
+        "package-linux": "electron-packager . git-selector --overwrite --asar --platform=linux --arch=x64 --icon=src/img/app-logo.png --prune=true --out=release-builds",
+        "package-all": "npm run package-mac && npm run package-linux && npm run package-win",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder -lw"
+    },
+    "build": {
+        "appId": "net.sys-io.git-selector",
+        "dmg": {
+            "contents": [
+                {
+                    "x": 110,
+                    "y": 150
+                },
+                {
+                    "x": 240,
+                    "y": 150,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ]
+        },
+        "linux": {
+            "target": [
+                "deb",
+                "snap",
+                "rpm",
+                "pacman",
+                "apk"
+            ]
+        },
+        "win": {
+            "target": [
+                "nsis",
+                "portable"
+            ],
+            "icon": "build/icon.ico"
+        }
     },
     "keywords": [],
-    "author": "Jos Craw",
+    "author": {
+        "name": "Jos Craw",
+        "email": "git-selector@sys-io.net"
+    },
     "license": "MIT",
     "dependencies": {
         "bootstrap": "^4.4.1",
-        "electron": "^8.2.0",
-        "electron-packager": "^14.2.1",
+        "child_process": "^1.0.2",
         "fs": "0.0.1-security",
         "glob": "^7.1.6",
         "jquery": "^3.4.1",
@@ -28,5 +66,8 @@
         "request": "^2.88.2",
         "shelljs": "^0.8.3"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "electron": "^8.2.0",
+        "electron-builder": "^22.4.1"
+    }
 }

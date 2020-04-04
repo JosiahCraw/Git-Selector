@@ -6,6 +6,7 @@ This App is designed to revolutionize the world of Zoom tutoring :smile: , not r
 1.  [The App](#app)
 2.  [Installation](#install)
     -   [Running from source](#source)
+    -   [Downloads](#downloads)
 3.  [Usage](#use)
 4.  [TODO](#todo)
 5.  [Author](#author)
@@ -38,9 +39,40 @@ user@computer:~$ npm run package-linux //linux can be replaced with win or mac d
 
 On Windows you can run this command from git bash once NPM is installed
 
-I have found some issues with native windows packaging however, it seems like if you have a space in your user name it causes npm to fail. Windows does work running from source though
+I have found some issues with native windows packaging however luckily I have included a working Windows executable in [downloads](#downloads), it seems like if you have a space in 
+your user name it causes npm to fail. Windows does work running from source though. For windows ensure that you have installed [Git for Windows](https://git-scm.com/download/win)
+and the Windows command line can access git.
 
-This will create a package in `release-builds`
+This will create a package in `release-builds/`
+
+Alternatively you could try install using `.deb`, `.pacman` or `.snap` I haven't tested these properly but had some issues with snap not being able to access git.
+```console
+user@computer:~$ npm run dist
+```
+
+This command will package the program based on the contents of `build` in [package.json](package.json) to, for example, only build .deb replace all items in `"build"` with:
+```json
+{
+    "appId": "net.sys-io.git-selector",
+    "linux": {
+        "target": "deb"
+    }
+}
+```
+
+Or to build NSIS and portable for Windows use:
+```json
+{
+    "appId": "net.sys-io.git-selector",
+    "win": {
+        "target": [
+            "nsis",
+            "portable"
+        ],
+        "icon": "build/icon.ico"
+    }
+}
+```
 
 <a name="source"></a>
 
@@ -50,6 +82,13 @@ Running for source should work automatically for all Operating Systems (Untested
 user@computer:~$ npm run start
 ```
 This command executes both `npm install` and `electron .` the available commands can be found in `package.json`
+
+<a name="downloads"></a>
+
+### Downloads
+-   [Linux]()
+-   [Windows]()
+-   [Mac]()
 
 <a name="use"></a>
 
