@@ -156,7 +156,7 @@ ipcMain.on('pull-project', (event, uri, name) => {
     } else {
         fs.readFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'utf8', (err, contents) => {
             if (err) {
-                if (err.errno === -2) {
+                if (err.errno === -2 || err.errno === -4058) {
                     fs.writeFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), '', (err) => {
                         if (err) {
                             console.trace(err)
