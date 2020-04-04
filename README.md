@@ -1,6 +1,6 @@
 # Git Selector
 
-This App is designed to revolutionize the world of Zoom tutoring :), not really but I wanted an excuse to try Electron so I made this. :gem:
+This App is designed to revolutionize the world of Zoom tutoring :smile: , not really but I wanted an excuse to try Electron so I made this. :gem:
 
 ## Contents
 1.  [The App](#app)
@@ -69,21 +69,25 @@ This shows the app with an ENEL373 test repository in this example I am copying 
 ## 4. TODO
 :negative_squared_cross_mark: Use paging on GitLab API to make projects and groups load in gradually and not limit to first 100 projects
 
-:white_large_square: Add preferences
+:pencil2: Add preferences
 
-:white_large_square: Allow users to clear selections
+:pencil2: Allow users to clear selections
 
-:white_large_square: Test on MacOS
+:pencil2: Test on MacOS
 
-:white_large_square: Test on Windows
+:pencil2: Test on Windows
 
-:white_large_square: Add Branch support
+:pencil2: Add Branch support
 
-:white_large_square: Make the comments centrally available
+:pencil2: Make the comments centrally available
 
-:white_large_square: Automatically build executables
+:pencil2: Automatically build executables
 
-:white_large_square: Create unit tests
+:pencil2: Create unit tests
+
+Get it, penciled in, I crack myself up :laughing:
+
+Yes I just discovered emojis in BitBucket that why there are so many
 
 <a name="author"></a>
 
