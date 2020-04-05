@@ -11,7 +11,7 @@
         "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=src/img/app-logo.icns --prune=true --out=release-builds",
         "package-win": "electron-packager . git-selector --overwrite --platform=win32 --arch=ia32 --icon=src/img/app-logo.ico --prune=true --out=release-builds --version-string.CompanyName=\"Not a Comapny inc.\" --version-string.FileDescription=\"Git Selector program\" --version-string.ProductName=\"Git Selector App\"",
         "package-linux": "electron-packager . git-selector --overwrite --asar --platform=linux --arch=x64 --icon=src/img/app-logo.png --prune=true --out=release-builds",
-        "package-all": "npm run package-mac && npm run package-linux && npm run package-win",
+        "package-all": "npm run package-linux && npm run package-win",
         "pack": "electron-builder --dir",
         "dist": "electron-builder -lw"
     },

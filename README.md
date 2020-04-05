@@ -88,7 +88,7 @@ This command executes both `npm install` and `electron .` the available commands
 ### Downloads
 -   [Linux]()
 -   [Windows]()
--   [Mac]()
+-   Mac - Sorry no Mac download as I don't have a Mac and can't build the image
 
 <a name="use"></a>
 
