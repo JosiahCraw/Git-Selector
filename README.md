@@ -50,6 +50,8 @@ Alternatively you could try install using `.deb`, `.pacman` or `.snap` I haven't
 user@computer:~$ npm run dist
 ```
 
+This dist command will by default build for all operating systems to change this go to [package.json](package.json) and change the `"dist"` command under `"scripts"` to `"electron-builder -w"` for Windows `-m` for Mac etc.
+
 This command will package the program based on the contents of `build` in [package.json](package.json) to, for example, only build .deb replace all items in `"build"` with:
 ```json
 {
