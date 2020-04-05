@@ -88,9 +88,9 @@ This command executes both `npm install` and `electron .` the available commands
 <a name="downloads"></a>
 
 ### Downloads
--   [Linux]()
--   [Windows]()
--   Mac - Sorry no Mac download as I don't have a Mac and can't build the image
+-   [Linux](https://storage.googleapis.com/git-selector/v0.0.1/git-selector-linux-x64.zip)
+-   [Windows](https://storage.googleapis.com/git-selector/v0.0.1/git-selector-win32-ia32.zip)
+-   [Mac](https://storage.googleapis.com/git-selector/v0.0.1/Git%20Selector%20Application-darwin-x64.zip)
 
 <a name="use"></a>
 
