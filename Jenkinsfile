@@ -1,13 +1,13 @@
 pipeline {
-  agent any
+  agent {
+    dockerfile {
+      filename 'ci/package/Dockerfile'
+    }
+
+  }
   stages {
     stage('package') {
-      agent {
-        dockerfile {
-          filename 'ci/package/Dockerfile'
-        }
-
-      }
+      agent any
       steps {
         sh 'npm run package-all'
         sh 'cd release-builds && for i in */; do zip -r "${i%/}.zip" "$i"; done'
