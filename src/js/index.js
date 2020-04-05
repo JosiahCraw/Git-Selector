@@ -3,6 +3,7 @@ const request = require('request')
 const os = require('os')
 const glob = require('glob')
 const fs = require('fs')
+const path = require('path')
 const shell = require('shelljs')
 const exec = require('child_process').exec
 
@@ -173,10 +174,11 @@ ipcMain.on('pull-project', (event, uri, name) => {
         }
     })
 
-    let gitPath = `${__dirname}/../lib`.replace(/(\s+)/g, '\\$1')
+    let winGitPath = path.join(__dirname, '../lib/bin/git.exe')
+    let gitPath = `${__dirname}/../lib`
     let clone = undefined;
     if (os.platform() == 'win32') {
-        clone = exec(`cd ${dirname}/.staging && ${gitPath}/git.exe clone ${uri}`, (error, stdout, stderr) => {
+        clone = exec(`cd ${basePath}\\.git-selector\\.staging && "${winGitPath}" clone ${uri}`, (error, stdout, stderr) => {
             if (error) {
                 console.trace(error)
                 console.log('STDOUT: '+stdout)
@@ -185,6 +187,7 @@ ipcMain.on('pull-project', (event, uri, name) => {
             event.reply('pull-complete', name)
         })
     } else {
+	gitPath = gitPath.replace(/(\s+)/g, '\$1')
         clone = exec(`cd ${dirname}/.staging && exec ${gitPath}/git clone ${uri}`, (error, stdout, stderr) => {
             if (error) {
                 console.trace(error)
