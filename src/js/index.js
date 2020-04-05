@@ -173,8 +173,8 @@ ipcMain.on('pull-project', (event, uri, name) => {
             event.reply('initial-comment-data', contents)
         }
     })
-
-    let winGitPath = path.join(__dirname, '../lib/bin/git.exe')
+	
+    let winGitPath = path.join(process.resourcesPath, 'lib/bin/git.exe')
     let gitPath = `${__dirname}/../lib`.replace(/(\s+)/g, '\\$1')
     let clone = undefined;
     if (os.platform() == 'win32') {

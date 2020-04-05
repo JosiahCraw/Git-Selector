@@ -13,7 +13,7 @@
         "package-linux": "npm install && electron-packager . git-selector --overwrite --asar --platform=linux --arch=x64 --icon=src/img/app-logo.png --prune=true --out=release-builds",
         "package-all": "npm install && npm run package-linux && npm run package-win",
         "pack": "electron-builder --dir",
-        "dist": "electron-builder -lw"
+        "dist": "electron-builder -w"
     },
     "build": {
         "appId": "net.sys-io.git-selector",
@@ -46,7 +46,13 @@
                 "portable"
             ],
             "icon": "build/icon.ico"
-        }
+        },
+        "extraResources": [
+            {
+				"from": "src/lib",
+				"to": "lib"
+			}
+        ]
     },
     "keywords": [],
     "author": {
