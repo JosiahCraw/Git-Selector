@@ -172,27 +172,32 @@ ipcMain.on('pull-project', (event, uri, name) => {
             event.reply('initial-comment-data', contents)
         }
     })
-    shell.cd(`${dirname}/.staging`.replace(/(\s+)/g, '\$1'))
 
-    let clone = exec(`export PATH=/usr/bin:$PATH && cd ${dirname}/.staging && git clone ${uri}`, (error, stdout, stderr) => {
-        if (error) {
-            console.trace(error)
-            console.log('STDOUT: '+stdout)
-            console.log('STDERR: '+stderr)
-        }
-        event.reply('pull-complete', name)
-    })
+    let gitPath = `${__dirname}/../lib`.replace(/(\s+)/g, '\\$1')
+    let clone = undefined;
+    if (os.platform() == 'win32') {
+        clone = exec(`cd ${dirname}/.staging && ${gitPath}/git.exe clone ${uri}`, (error, stdout, stderr) => {
+            if (error) {
+                console.trace(error)
+                console.log('STDOUT: '+stdout)
+                console.log('STDERR: '+stderr)
+            }
+            event.reply('pull-complete', name)
+        })
+    } else {
+        clone = exec(`cd ${dirname}/.staging && exec ${gitPath}/git clone ${uri}`, (error, stdout, stderr) => {
+            if (error) {
+                console.trace(error)
+                console.log('STDOUT: '+stdout)
+                console.log('STDERR: '+stderr)
+            }
+            event.reply('pull-complete', name)
+        })
+    }
 
     clone.on('exit', (code) => {
         console.log(code)
     })
-    // if (shell.exec(`git clone ${uri}`).code === 0) {
-    //     event.reply('pull-complete', name)
-    // } else {
-    //     console.log(`Clone Failed for URI ${uri}`)
-    //     event.reply('pull-complete', name)
-    // }
-    //}
 })
 
 ipcMain.on('get-url', (event) => {
