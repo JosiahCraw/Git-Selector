@@ -156,7 +156,7 @@ ipcMain.on('pull-project', (event, uri, name) => {
     // if (!shell.which('git')) {
     //     console.trace('program requires git')
     // } else {
-    fs.readFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), 'utf8', (err, contents) => {
+    fs.readFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\\$1'), 'utf8', (err, contents) => {
         if (err) {
             if (err.errno === -2 || err.errno === -4058) {
                 fs.writeFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\$1'), '', (err) => {
@@ -175,7 +175,7 @@ ipcMain.on('pull-project', (event, uri, name) => {
     })
 
     let winGitPath = path.join(__dirname, '../lib/bin/git.exe')
-    let gitPath = `${__dirname}/../lib`
+    let gitPath = `${__dirname}/../lib`.replace(/(\s+)/g, '\\$1')
     let clone = undefined;
     if (os.platform() == 'win32') {
         clone = exec(`cd ${basePath}\\.git-selector\\.staging && "${winGitPath}" clone ${uri}`, (error, stdout, stderr) => {
