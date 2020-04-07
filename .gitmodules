@@ -1,4 +1,3 @@
 [submodule "src/lib/git-win"]
 	path = src/lib/git-win
 	url = https://git.sys-io.net/scm/gs/git-win.git
-
