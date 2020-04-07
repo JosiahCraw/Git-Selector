@@ -1,0 +1,6 @@
+[submodule "src/lib/git-win"]
+	path = src/lib/git-win
+	url = https://git.sys-io.net/scm/gs/git-win.git
+[submodule "src/lib/git-linux"]
+	path = src/lib/git-linux
+	url = https://git.sys-io.net/scm/gs/git-linux.git
