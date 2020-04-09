@@ -12,7 +12,6 @@ Menu.setApplicationMenu(null)
 let TOKEN = ''
 let URL = 'https://eng-git.canterbury.ac.nz'
 let basePath = app.getPath("home")
-console.log(basePath)
 let dirname = `${basePath}/.git-selector`
 
 shell.cd(basePath)
@@ -153,9 +152,6 @@ ipcMain.on('comment-update', (event, comment, project) => {
 })
 
 ipcMain.on('pull-project', (event, uri, name) => {
-    // if (!shell.which('git')) {
-    //     console.trace('program requires git')
-    // } else {
     fs.readFile(`${dirname}/.data/${name}.json`.replace(/(\s+)/g, '\\$1'), 'utf8', (err, contents) => {
         if (err) {
             if (err.errno === -2 || err.errno === -4058) {
@@ -173,12 +169,20 @@ ipcMain.on('pull-project', (event, uri, name) => {
             event.reply('initial-comment-data', contents)
         }
     })
-	
-    let winGitPath = path.join(process.resourcesPath, 'lib/bin/git.exe')
-    let gitPath = `${__dirname}/../lib`.replace(/(\s+)/g, '\\$1')
+    
+    let winGitPath = undefined
+    let gitPath = undefined
+    if (process.env.NODE_ENV !== 'dev') {
+        winGitPath = path.join(process.resourcesPath, 'git/bin/git.exe')
+        gitPath = `${process.resourcesPath}/git/bin/git`.replace(/(\s+)/g, '\\$1')
+    } else {
+        winGitPath = path.join(__dirname, '../lib/git-win/bin/git.exe')
+        gitPath = `${__dirname}/../lib/git-linux/bin/git`.replace(/(\s+)/g, '\\$1')
+    }
+
     let clone = undefined;
     if (os.platform() == 'win32') {
-        clone = exec(`cd ${basePath}\\.git-selector\\.staging && "${winGitPath}" clone ${uri}`, (error, stdout, stderr) => {
+        clone = exec(`echo $PATH && cd ${basePath}\\.git-selector\\.staging && "${winGitPath}" clone ${uri}`, (error, stdout, stderr) => {
             if (error) {
                 console.trace(error)
                 console.log('STDOUT: '+stdout)
@@ -187,8 +191,8 @@ ipcMain.on('pull-project', (event, uri, name) => {
             event.reply('pull-complete', name)
         })
     } else {
-	gitPath = gitPath.replace(/(\s+)/g, '\$1')
-        clone = exec(`cd ${dirname}/.staging && exec ${gitPath}/git clone ${uri}`, (error, stdout, stderr) => {
+        gitPath = gitPath.replace(/(\s+)/g, '\$1')
+        clone = exec(`cd ${dirname}/.staging && exec ${gitPath} clone ${uri}`, (error, stdout, stderr) => {
             if (error) {
                 console.trace(error)
                 console.log('STDOUT: '+stdout)

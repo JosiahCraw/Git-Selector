@@ -9,9 +9,12 @@ pipeline {
 
       }
       steps {
-        sh 'npm run package-all'
-        sh 'cd release-builds && for i in */; do zip -r "${i%/}.zip" "$i"; done'
-        archiveArtifacts '*.zip'
+        sh 'npm run dist'
+        sh 'cd dist'
+        archiveArtifacts '*.snap'
+        archiveArtifacts '*.exe'
+        archiveArtifacts '*.deb'
+        archiveArtifacts '*.pacman'
       }
     }
 

@@ -26,3 +26,4 @@ RUN apt-get update -y && apt-get install -y nodejs
 RUN npm install -g electron-packager
 RUN npm install -g electron
 RUN apt-get update -y && apt-get install -y zip
+RUN sudo chown -R 1000:1000 "/.npm"

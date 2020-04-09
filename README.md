@@ -34,30 +34,24 @@ The app also supports local commenting making it easier to catchup to where you 
 Ensure that NPM is installed on your machine and run the following command:
 
 ```console
-user@computer:~$ npm run package-linux //linux can be replaced with win or mac depending on your operating system
+user@computer:~$ npm run dist //This Command will, by default build for both Linux and Windows
 ```
 
 On Windows you can run this command from git bash once NPM is installed
 
 I have found some issues with native windows packaging however luckily I have included a working Windows executable in [downloads](#downloads), it seems like if you have a space in 
-your user name it causes npm to fail. Windows does work running from source though. For windows ensure that you have installed [Git for Windows](https://git-scm.com/download/win)
-and the Windows command line can access git.
+your user name it causes npm to fail.
 
-This will create a package in `release-builds/`
+This will create the packaged files in `dist/`
 
-Alternatively you could try install using `.deb`, `.pacman` or `.snap` I haven't tested these properly but had some issues with snap not being able to access git.
-```console
-user@computer:~$ npm run dist
-```
+This dist command will by default build for Windows and Linux, to change this go to [package.json](package.json) and change the `"dist"` command under `"scripts"` to `"electron-builder -w"` for Windows `-m` for Mac etc.
 
-This dist command will by default build for all operating systems to change this go to [package.json](package.json) and change the `"dist"` command under `"scripts"` to `"electron-builder -w"` for Windows `-m` for Mac etc.
-
-This command will package the program based on the contents of `build` in [package.json](package.json) to, for example, only build .deb replace all items in `"build"` with:
+This command will package the program based on the contents of `build` in [package.json](package.json) to, for example, only build .AppImage replace the target in Linux to:
 ```json
 {
-    "appId": "net.sys-io.git-selector",
     "linux": {
-        "target": "deb"
+        "...": "...",
+        "target": "AppImage"
     }
 }
 ```
@@ -65,13 +59,12 @@ This command will package the program based on the contents of `build` in [packa
 Or to build NSIS and portable for Windows use:
 ```json
 {
-    "appId": "net.sys-io.git-selector",
     "win": {
         "target": [
             "nsis",
             "portable"
         ],
-        "icon": "build/icon.ico"
+        "...": "..."
     }
 }
 ```
@@ -88,9 +81,14 @@ This command executes both `npm install` and `electron .` the available commands
 <a name="downloads"></a>
 
 ### Downloads
--   [Linux](https://storage.googleapis.com/git-selector/v0.0.1/git-selector-linux-x64.zip)
--   [Windows](https://storage.googleapis.com/git-selector/v0.0.1/git-selector-win32-ia32.zip)
--   [Mac](https://storage.googleapis.com/git-selector/v0.0.1/Git%20Selector%20Application-darwin-x64.zip)
+-   Linux
+    -   [Zip](https://storage.googleapis.com/git-selector/v0.1.0/Git%20Selector%200.1.0-linux.zip) (Full unpackaged Zip, the file is big)
+    -   [AppImage](https://storage.googleapis.com/git-selector/v0.1.0/Git%20Selector%20Application-0.1.0.AppImage) AppImage Executable (Recommended)
+-   Windows
+    -   [Portable](https://storage.googleapis.com/git-selector/v0.1.0/Git%20Selector%20Application%200.1.0.exe)
+    -   [Installer](https://storage.googleapis.com/git-selector/v0.1.0/Git%20Selector%20Application%20Setup%200.1.0.exe)
+    -   [Zip](https://storage.googleapis.com/git-selector/v0.1.0/Git%20Selector%200.1.0-win.zip)
+-   [Mac](#downloads) (Sorry I don't have a Mac so I can't build for Mac)
 
 <a name="use"></a>
 
@@ -117,23 +115,26 @@ This shows the app with an ENEL373 test repository in this example I am copying 
 ## 4. TODO
 :negative_squared_cross_mark: Use paging on GitLab API to make projects and groups load in gradually and not limit to first 100 projects
 
-:pencil2: Add preferences
+:negative_squared_cross_mark: Use portable git for linux so packaged versions and installs without git can access git
 
-:pencil2: Allow users to clear selections
+:pencil2: Add preferences Eg. Stored token and URL
 
-:pencil2: Add portable git for windows
+:pencil2: Allow users to clear selections, Eg. Selected Group
+
+:negative_squared_cross_mark: Add portable git for windows
 
 :pencil2: Test on MacOS
 
-:pencil2: Test on Windows
+:negative_squared_cross_mark: Test on Windows
 
 :pencil2: Add Branch support
 
 :pencil2: Make the comments centrally available
 
-:pencil2: Automatically build executables
+:pencil2: Automatically build executable with CI (started but not finished yet)
 
 :pencil2: Create unit tests
+
 
 Get it, penciled in, I crack myself up :laughing:
 

@@ -1,19 +1,18 @@
 {
     "name": "git-selector",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "homepage": "git-selector.sys-io.net",
     "productName": "Git Selector Application",
     "description": "A Python based Electron app to make switching between projects within a group easier",
+    "repository": {
+        "url": "https://git.sys-io.net/projects/GS/repos/git-selector"
+    },
     "main": "src/js/index.js",
     "scripts": {
-        "start": "npm install && electron .",
+        "start": "npm install && env NODE_ENV=dev electron .",
         "test": "echo \"Error no test provided\" && exit(1)",
-        "package-mac": "npm install && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=src/img/app-logo.icns --prune=true --out=release-builds",
-        "package-win": "npm install && electron-packager . git-selector --overwrite --platform=win32 --arch=ia32 --icon=src/img/app-logo.ico --prune=true --out=release-builds --version-string.CompanyName=\"Not a Comapny inc.\" --version-string.FileDescription=\"Git Selector program\" --version-string.ProductName=\"Git Selector App\"",
-        "package-linux": "npm install && electron-packager . git-selector --overwrite --asar --platform=linux --arch=x64 --icon=src/img/app-logo.png --prune=true --out=release-builds",
-        "package-all": "npm install && npm run package-linux && npm run package-win",
         "pack": "electron-builder --dir",
-        "dist": "electron-builder -w"
+        "dist": "electron-builder -lw"
     },
     "build": {
         "appId": "net.sys-io.git-selector",
@@ -32,12 +31,16 @@
             ]
         },
         "linux": {
-            "target": [
-                "deb",
-                "snap",
-                "rpm",
-                "pacman",
-                "apk"
+            "target": "AppImage",
+            "extraResources": [
+                {
+                    "from": "src/lib/git-linux",
+                    "to": "git",
+                    "filter": [
+                        "**/*",
+                        "!.git"
+                    ]
+                }
             ]
         },
         "win": {
@@ -45,13 +48,22 @@
                 "nsis",
                 "portable"
             ],
+            "extraResources": [
+                {
+                    "from": "src/lib/git-win",
+                    "to": "git",
+                    "filter": [
+                        "**/*",
+                        "!.git"
+                    ]
+                }
+            ],
             "icon": "build/icon.ico"
         },
-        "extraResources": [
-            {
-				"from": "src/lib",
-				"to": "lib"
-			}
+        "files": [
+            "**/*",
+            "!src/lib/git-win/.git",
+            "!src/lib/git-linux/.git"
         ]
     },
     "keywords": [],
